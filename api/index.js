@@ -1,7 +1,8 @@
 import express from "express"
 import mongoose from "mongoose"
 import dotenv from "dotenv"
-
+import userRouter from "./router/user.route.js";
+import authRouter from "./router/auth.route.js"
 dotenv.config();
 mongoose.connect(process.env.MONGO).then(()=>{
    console.log("Connected to MongoDB") 
@@ -11,12 +12,14 @@ mongoose.connect(process.env.MONGO).then(()=>{
 
 
 const app = express();
-
+app.use(express.json());//to allow json as input to the server
 app.listen(3000, () =>{
     console.log('Server is runniogn on 3000')
 })
 
-//1:5
+app.use('/api/user', userRouter)
+app.use('/api/auth',authRouter)
+//1:40
 
 //mongo passswrod: cCKZ6lrib8Oe8aX7
 
