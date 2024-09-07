@@ -28,12 +28,12 @@ app.use((err ,req, res,next)=>{
         success:false,
         statusCode,
         message
-    })
+    })  
 })
 
 
 
-//1:59
+//2:15
 
 //mongo passswrod: cCKZ6lrib8Oe8aX7
 
