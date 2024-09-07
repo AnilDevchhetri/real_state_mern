@@ -9,7 +9,8 @@ const rootReducer = combineReducers({user: userReducer})
 const persistConfig = {
     key:'root',
     storage,
-    version: 1
+    version: 1,
+    blacklist: ['error'], // Do not persist the error field
 }
 
 const persistedReducer = persistReducer(persistConfig,rootReducer)

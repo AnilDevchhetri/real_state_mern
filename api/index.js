@@ -25,7 +25,7 @@ app.use((err ,req, res,next)=>{
     const statusCode = err.statusCode || 500;
     const message = err.message || "Internal server error"
     return res.status(statusCode).json({
-        success:false,
+        success:false, 
         statusCode,
         message
     })  
@@ -33,7 +33,7 @@ app.use((err ,req, res,next)=>{
 
 
 
-//2:53
+//3:13
 
 //mongo passswrod: cCKZ6lrib8Oe8aX7
 

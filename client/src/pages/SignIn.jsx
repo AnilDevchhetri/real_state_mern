@@ -1,7 +1,8 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Link , useNavigate} from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { signInFailure, signInStart, signInSuccess } from "../redux/user/userSlice";
+import Oauth from "../components/Oauth";
 const Signin = () => {
   const [formData, setFormData] = useState({});
   const {loading,error} = useSelector((state)=>state.user);
@@ -15,8 +16,9 @@ const Signin = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    dispatch(signInStart())
+ 
     try {
+      dispatch(signInStart())
       const res = await fetch("/api/auth/signin", {
         method: "POST",
         headers: {
@@ -25,6 +27,11 @@ const Signin = () => {
         body: JSON.stringify(formData),
       });
       const data = await res.json();
+       // If the response indicates failure, handle it
+    if (!res.ok || data.success === false) {
+      dispatch(signInFailure(data.message || "Sign in failed."));
+      return;
+    }
       if (data.success === false) {
         dispatch(signInFailure(data.message))
         return;
@@ -35,6 +42,7 @@ const Signin = () => {
       dispatch(signInFailure(error.message))
     }
   };
+
 
   return (
     <div className="p-3 max-w-lg mx-auto">
@@ -50,6 +58,7 @@ const Signin = () => {
           className="border p-3 rounded-lg"
           id="email"
           onChange={handleChange}
+          autoComplete="off" 
         />
         <input
           type="password"
@@ -57,6 +66,7 @@ const Signin = () => {
           className="border p-3 rounded-lg"
           id="password"
           onChange={handleChange}
+          autoComplete="current-password"
         />
         <button
           disabled={loading}
@@ -64,6 +74,7 @@ const Signin = () => {
         >
           {loading ? "Loading..." : "Sign In"}
         </button>
+        <Oauth />
       </form>
       <div className="flex gap-2 mt-5">
         <p>Dont Have an account? </p>
@@ -71,7 +82,7 @@ const Signin = () => {
           <span className="text-blue-700">Sign Up</span>
         </Link>
       </div>
-      {error && <p className="text-red-500 mt-5">{error}</p>}
+      {error && <p className="text-red-500 mt-5">{JSON.stringify(error)}</p>}
     </div>
   );
 };

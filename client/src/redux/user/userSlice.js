@@ -22,6 +22,7 @@ const userSlice =createSlice({
         },
         signInFailure:(state,action)=>{
             state.error = action.payload;
+            console.log("Error payload in reducer:", action.payload);
             state.loading = false
         }
     }
