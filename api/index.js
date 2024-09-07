@@ -19,7 +19,21 @@ app.listen(3000, () =>{
 
 app.use('/api/user', userRouter)
 app.use('/api/auth',authRouter)
-//1:40
+
+//Midleware to handle error
+app.use((err ,req, res,next)=>{
+    const statusCode = err.statusCode || 500;
+    const message = err.message || "Internal server error"
+    return res.status(statusCode).json({
+        success:false,
+        statusCode,
+        message
+    })
+})
+
+
+
+//1:50
 
 //mongo passswrod: cCKZ6lrib8Oe8aX7
 
