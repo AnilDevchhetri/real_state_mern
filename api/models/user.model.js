@@ -14,7 +14,11 @@ const userSchema = new mongoose.Schema({
     password: {
         type:String,
         required: true
-    }
+    },
+    avatar:{
+        type: String,
+        default:"https://chhetrianil.com.np/wp-content/themes/anilchhetri/assets/images/profile.png"
+    },
 },{timestamps:true});
 
 
