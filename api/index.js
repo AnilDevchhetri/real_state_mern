@@ -3,6 +3,7 @@ import mongoose from "mongoose"
 import dotenv from "dotenv"
 import userRouter from "./router/user.route.js";
 import authRouter from "./router/auth.route.js"
+import cookieParser from "cookie-parser";
 dotenv.config();
 mongoose.connect(process.env.MONGO).then(()=>{
    console.log("Connected to MongoDB") 
@@ -13,6 +14,7 @@ mongoose.connect(process.env.MONGO).then(()=>{
 
 const app = express();
 app.use(express.json());//to allow json as input to the server
+app.use(cookieParser())
 app.listen(3000, () =>{
     console.log('Server is runniogn on 3000')
 })
@@ -33,7 +35,7 @@ app.use((err ,req, res,next)=>{
 
 
 
-//4:11
+//4:27
 //mongo passswrod: cCKZ6lrib8Oe8aX7
 
 //mongodb+srv://realstate-mearn:cCKZ6lrib8Oe8aX7@realstate-mern.rrrsb.mongodb.net/mern-realstate?retryWrites=true&w=majority&appName=realstate-mern 

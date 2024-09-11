@@ -27,6 +27,7 @@ const Profile = () => {
   
     uploadTask.on('state_changed',
       (snapshot)=>{
+        setFileUploadError(false)
         const progress = (snapshot.bytesTransferred/snapshot.totalBytes)* 100;
         setFilePerc(Math.round(progress))
        
@@ -38,6 +39,7 @@ const Profile = () => {
         getDownloadURL(uploadTask.snapshot.ref).then
         ((download)=>{
            setFormData({...formData,avatar:download})
+           setFileUploadError(false)
         })
       }
     )
