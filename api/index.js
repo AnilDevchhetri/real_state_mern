@@ -33,7 +33,7 @@ app.use((err ,req, res,next)=>{
 
 
 
-//3:42
+//4:11
 //mongo passswrod: cCKZ6lrib8Oe8aX7
 
 //mongodb+srv://realstate-mearn:cCKZ6lrib8Oe8aX7@realstate-mern.rrrsb.mongodb.net/mern-realstate?retryWrites=true&w=majority&appName=realstate-mern 
