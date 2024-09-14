@@ -2,7 +2,8 @@ import express from "express"
 import mongoose from "mongoose"
 import dotenv from "dotenv"
 import userRouter from "./router/user.route.js";
-import authRouter from "./router/auth.route.js"
+import authRouter from "./router/auth.route.js";
+import listingRourter from './router/listing.route.js'
 import cookieParser from "cookie-parser";
 dotenv.config();
 mongoose.connect(process.env.MONGO).then(()=>{
@@ -21,6 +22,7 @@ app.listen(3000, () =>{
 
 app.use('/api/user', userRouter)
 app.use('/api/auth',authRouter)
+app.use('/api/listing',listingRourter);
 
 //Midleware to handle error
 app.use((err ,req, res,next)=>{
@@ -35,7 +37,7 @@ app.use((err ,req, res,next)=>{
 
 
 
-//4:57
+//5:15:
 //mongo passswrod: cCKZ6lrib8Oe8aX7
 
 //mongodb+srv://realstate-mearn:cCKZ6lrib8Oe8aX7@realstate-mern.rrrsb.mongodb.net/mern-realstate?retryWrites=true&w=majority&appName=realstate-mern 
