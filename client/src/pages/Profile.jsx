@@ -31,6 +31,7 @@ const Profile = () => {
   const [updateSuccess, setUpdateSuccess] = useState(false);
   const [showListingError, setShowListingError] = useState(false);
   const [userListings, setUserListings] = useState([]);
+  const [userUpdateLoading,setUserUpdateLoading] = useState(false);
   const dispatch = useDispatch();
 
   useEffect(() => {
@@ -153,6 +154,9 @@ const Profile = () => {
         console.log(error.message)
       }
   }
+  useEffect(() => {
+    console.log('Initial loading state:', loading);
+  }, []);
   return (
     <div className="p-3 max-w-lg mx-auto">
       <h1 className="text-3xl font-semibold text-center my-7">Profile</h1>
