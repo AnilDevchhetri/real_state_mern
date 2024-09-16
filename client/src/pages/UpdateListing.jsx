@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   getStorage,
   uploadBytes,
@@ -7,11 +7,13 @@ import {
   getDownloadURL,
 } from "firebase/storage";
 import { app } from "../firebase";
-import {useSelector} from'react-redux'
-import { useNavigate } from "react-router-dom";
-const CreateListing = () => {
-  const   {currentUser} = useSelector((state)=> state.user)
+import { useSelector } from "react-redux";
+import { useNavigate, useParams } from "react-router-dom";
+
+const UpdateListing = () => {
+  const { currentUser } = useSelector((state) => state.user);
   const [files, setFiles] = useState([]);
+  const params = useParams();
   const navigate = useNavigate();
   const [formData, setFormData] = useState({
     imageUrls: [],
@@ -29,9 +31,29 @@ const CreateListing = () => {
   });
   const [imageUploadError, setImageUploadError] = useState(false);
   const [uploading, setUploading] = useState(false);
-  const [error, setError] = useState(false)
-  const [loading,setLoading] = useState(false)
+  const [error, setError] = useState(false);
+  const [loading, setLoading] = useState(false);
   console.log(formData);
+
+  useEffect(() => {
+    const fetchListing = async () => {
+      try {
+        const listingId = params.listingId;
+        console.log(listingId);
+        const res = await fetch(`/api/listing/get/${listingId}`);
+        const data = await res.json();
+        if (data.success === false) {
+          console.log(data.message);
+          return;
+        }
+        setFormData(data);
+      } catch (error) {
+        console.log(error);
+      }
+    };
+    fetchListing();
+  }, []);
+
   const handleImageSubmit = (e) => {
     if (files.length > 0 && files.length + formData.imageUrls.length < 7) {
       setUploading(true);
@@ -108,48 +130,58 @@ const CreateListing = () => {
       });
     }
 
-    if(e.target.type === 'number'|| e.target.type === 'text' || e.target.type === 'textarea'){
+    if (
+      e.target.type === "number" ||
+      e.target.type === "text" ||
+      e.target.type === "textarea"
+    ) {
       setFormData({
         ...formData,
-        [e.target.id]: e.target.value
-      })
+        [e.target.id]: e.target.value,
+      });
     }
-
   };
 
-  const hanldeSubmit = async (e) =>{
+  const hanldeSubmit = async (e) => {
     e.preventDefault();
     try {
-      if(formData.imageUrls.length < 1) return setError("Upload atleast one Image")
-      if(+formData.regularPrice < +formData.discountPrice) return setError('Discount price Must be smaller then the  regular price')
-      setLoading(true)
+      if (formData.imageUrls.length < 1)
+        return setError("Upload atleast one Image");
+      if (+formData.regularPrice < +formData.discountPrice)
+        return setError(
+          "Discount price Must be smaller then the  regular price"
+        );
+      setLoading(true);
       setError(false);
-      const res = await fetch('/api/listing/create',{
-        method:'POST',
-        headers:{
-          'Content-Type':'application/json',
+      const res = await fetch(`/api/listing/update/${params.listingId}`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
         },
-        body: JSON.stringify({...formData,userRef:currentUser._id})
+        body: JSON.stringify({ ...formData, userRef: currentUser._id }),
       });
       const data = await res.json();
-      setLoading(false)
-      if(data.success == false){
+      setLoading(false);
+      if (data.success == false) {
         setError(data.message);
       }
-      // navigate(`/listiong/${data._id}`)
-      navigate(`/profile`)
+    //   navigate(`/profile/${data._id}`);
+      navigate(`/profile`);
     } catch (error) {
-      setError(error.message)
-      setLoading(false)
+      setError(error.message);
+      setLoading(false);
     }
-  }
+  };
 
   return (
     <main className="p-3 max-w-4xl mx-auto">
       <h1 className="text-3xl font-semibold text-center my-7">
-        Create a Property
+        Update a Property
       </h1>
-      <form onSubmit={hanldeSubmit} className="flex flex-col gap-4 sm:flex-row ">
+      <form
+        onSubmit={hanldeSubmit}
+        className="flex flex-col gap-4 sm:flex-row "
+      >
         <div className="flex flex-col gap-4 flex-1">
           <input
             type="text"
@@ -292,9 +324,8 @@ const CreateListing = () => {
                   <span className="text-sm">($/Month)</span>
                 </div>
               </div>
-                )}
-            </div>
-      
+            )}
+          </div>
         </div>
         <div className="flex flex-col flex-1 gap-4">
           <p className="font-semibold">
@@ -343,8 +374,11 @@ const CreateListing = () => {
                 </button>
               </div>
             ))}
-          <button disabled={loading || uploading} className="p-3 bg-slate-700 text-white rounded-lg uppcase hover:opacity-95 disabled:opacity-85">
-           {loading ? 'Creating...':'Create Property'}
+          <button
+            disabled={loading || uploading}
+            className="p-3 bg-slate-700 text-white rounded-lg uppcase hover:opacity-95 disabled:opacity-85"
+          >
+            {loading ? "Updating..." : "Update Property"}
           </button>
           {error && <p className="text-red-700 text-sm">{error}</p>}
         </div>
@@ -353,5 +387,6 @@ const CreateListing = () => {
   );
 };
 
+export default UpdateListing;
 
-export default CreateListing;
+//
