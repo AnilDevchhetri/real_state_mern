@@ -165,8 +165,8 @@ const UpdateListing = () => {
       if (data.success == false) {
         setError(data.message);
       }
-    //   navigate(`/profile/${data._id}`);
-      navigate(`/profile`);
+      navigate(`/listing/${data._id}`);
+    //   navigate(`/profile`);
     } catch (error) {
       setError(error.message);
       setLoading(false);

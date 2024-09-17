@@ -136,8 +136,8 @@ const CreateListing = () => {
       if(data.success == false){
         setError(data.message);
       }
-      // navigate(`/listiong/${data._id}`)
-      navigate(`/profile`)
+      navigate(`/listiong/${data._id}`)
+      // navigate(`/profile`)
     } catch (error) {
       setError(error.message)
       setLoading(false)
