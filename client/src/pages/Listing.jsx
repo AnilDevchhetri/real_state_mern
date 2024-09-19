@@ -6,12 +6,16 @@ import { Navigation } from "swiper/modules";
 import "swiper/css/bundle";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faBath, faBed, faChair, faLocation, faMap, faMapLocation, faParking } from '@fortawesome/free-solid-svg-icons'; // Import the bed icon
+import {useSelector } from 'react-redux'
+import Contact from "../components/Contact";
 const Listing = () => {
   SwiperCore.use([Navigation]);
   const [listing, setListing] = useState([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(false);
+  const [contact,setContact] = useState(false);
   const params = useParams();
+  const {currentUser} = useSelector((state)=>state.user)
   console.log(listing);
   useEffect(() => {
     const fetchListing = async () => {
@@ -36,7 +40,7 @@ const Listing = () => {
     fetchListing();
   }, []);
   return (
-    <main>
+    <main className="mb-10">
       {loading && <p className="text-center my-7 text-2xl">Loading...</p>}
       {error && (
         <p className="text-center my-7 text-2xl">Somthing went wrong</p>
@@ -90,6 +94,10 @@ const Listing = () => {
              {listing.bathrooms}{listing.furnished > 1 ?'Fursnished':'Unfurnished'}</li>
              
         </ul>
+        {currentUser && listing.userRef != currentUser._id && !contact && (
+            <button onClick={()=>setContact(true)} className="bg-blue-700 text-white rounded-lg uppercase hover:opacity-90 w-full p-3 my-5">Contact Owner</button>
+        )}
+        {contact && <Contact listing={listing} />}
       </div>
     </main>
   );
