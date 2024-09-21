@@ -25,8 +25,8 @@ const Contact = ({listing}) => {
         {
             landloard &&(
                 <div className='flex flex-col gap-4 py-5'>
-                    <p >Contact <span className='font-semibold'>{landloard.username}</span>
-                    <span>{listing.name.toLowerCase()}</span></p>
+                    <p >Contact <span className='font-bold'>{landloard.username} </span>
+                    <span className='font-semibold'>{listing.name.toLowerCase()}</span></p>
                     <textarea name="message" id="message"  rows="5" placeholder='Your Message' className='w-full border p-3 rounded-lg outline-none' value={message} onChange={onChange}></textarea>
                    <Link to={`mailto:${landloard.email}?subject=Regarding ${listing.name}&body${message}`} className='bg-slate-700 text-white text-center p-3 uppercase mt-3 rounded-lg hover:opacity-95'>
                        Send Message
