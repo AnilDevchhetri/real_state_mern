@@ -136,7 +136,7 @@ const CreateListing = () => {
       if(data.success == false){
         setError(data.message);
       }
-      navigate(`/listiong/${data._id}`)
+      navigate(`/listing/${data._id}`)
       // navigate(`/profile`)
     } catch (error) {
       setError(error.message)
@@ -145,7 +145,7 @@ const CreateListing = () => {
   }
 
   return (
-    <main className="p-3 max-w-4xl mx-auto">
+    <main className="p-3 max-w-4xl mx-auto mb-[100px]">
       <h1 className="text-3xl font-semibold text-center my-7">
         Create a Property
       </h1>
@@ -169,6 +169,7 @@ const CreateListing = () => {
             id="description"
             onChange={handleChange}
             value={formData.description}
+            rows={10}
           />
           <input
             type="text"
@@ -264,7 +265,7 @@ const CreateListing = () => {
                 type="number"
                 id="regularPrice"
                 min="1"
-                max="10000"
+                max="10000000"
                 className="p-3 border border-gray-300 outline-none"
                 required
                 onChange={handleChange}
