@@ -14,6 +14,7 @@ const Search = () => {
         })
         const [loading, setLoading]= useState(false)
         const [listings,setListings] = useState([])
+        const [showMore,setShowMore] = useState([])
         console.log(listings)
         useEffect(()=>{
             const urlParams = new URLSearchParams(location.search);
@@ -47,11 +48,16 @@ const Search = () => {
 
             const fetchListings = async () =>{
                 setLoading(true)
-               
+                setShowMore(false)
                 const searchQuery = urlParams.toString();
                 console.log(searchQuery)
                 const res = await fetch(`/api/listing/get?${searchQuery}`)
                 const data = await res.json();
+                if(data.length > 8){
+                  setShowMore(true)
+                }else{
+                  setShowMore(false)
+                }
                 setListings(data);
                 setLoading(false);
 
@@ -96,8 +102,21 @@ const Search = () => {
             const searchQuery = urlParams.toString()
             navigate(`/search?${searchQuery}`)
         }
+    const onShowMoreClick = async () =>{
+      const numberOfListings = listings.length;
+      const startIndex = numberOfListings
+      const urlParams = new URLSearchParams(location.search)
+      urlParams.set('startIndex',startIndex);
+      const searchQuery = urlParams.toString();
+      const res = await fetch(`/api/listing/get?${searchQuery }`)
+      const data  = await res.json();
+      if(data.length < 9){
+        setShowMore(false)
+      }
+      setListings([...listings,...data])
+    }
   return (
-    <div className="flex flex-col  md:flex-row">
+    <div className="flex flex-col  md:flex-row max-w-6xl mx-auto">
       <div className=" p-7 border-b-2 md:border-r-2 md:min-h-screen w-full md:w-[300px]">
         <form onSubmit={handleSubmit} className="flex flex-col gap-8">
           <div className="flex items-center gap-2">
@@ -183,7 +202,7 @@ const Search = () => {
           </button>
         </form>
       </div>
-      <div className="flex-1">
+      <div className="flex-1 ">
         <h1 className="text-3xl  font-semibold border-b p-3 text-slate-700 mt-5">Result</h1>
         <div className="p-7 flex flex-wrap gap-2">
           {!loading && listings.length === 0 &&(<p className="text-xl text-slade-700">No Listing Found</p>)}
@@ -191,7 +210,21 @@ const Search = () => {
           {!loading && listings && listings.map((listing)=>(
             <ListingItem key={listing._id} listing={listing} />
           ))}
+
+         
         </div>
+        <div className="flex flex-col items-center py-10">
+
+        
+        {
+            showMore && (
+              <button
+              onClick={onShowMoreClick}
+              className="text-green-700 hover:underline-p-7 text-center"
+              >Show More</button>
+            )
+          }
+          </div>
       </div>
     </div>
   );
